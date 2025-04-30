@@ -1,0 +1,39 @@
+{
+  "strength": {
+    "Number of Reps": "3 to 5",
+    "Rest Times": "3 to 5 min",
+    "Number of sets": "4 to 5 sets",
+    "Percentage of Max": "70 to 90%"
+  },
+  "hypertrophy": {
+    "Number of Reps": "6 to 12",
+    "Rest Times": "1 to 2 min",
+    "Number of sets": "3 to 4 sets",
+    "Percentage of Max": "60 to 80%"
+  },
+  "power": {
+    "Number of Reps": "1 to 5",
+    "Rest Times": "3 to 5 minutes",
+    "Number of sets": "3 to 5 sets",
+    "Percentage of Max": "80 to 90%"
+  },
+  "endurance_muscular": {
+    "Number of Reps": "12 to 15",
+    "Rest Times": "0 to 60 sec",
+    "Number of sets": "3 to 6 sets",
+    "Percentage of Max": "50-70%"
+  },
+  "endurance_anaerobic": {
+    "Rest Times": "30 to 90 seconds",
+    "Percentage of Max Heart rate": "80-90%",
+    "Work to rest ratio": "1:2 to 1:4",
+    "Number of Reps": "12 to 15",
+    "Number of sets": "3 to 6",
+    "Percentage of Max": "50 to 70%"
+  },
+  "endurance_aerobic": {
+    "Rest Times": "0 to 30 seconds",
+    "Percentage of Max Heart rate": "70-80%",
+    "Work to rest ratio": "1:1 to 1:0"
+  }
+}
