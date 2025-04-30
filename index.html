@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workout Plan Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    label, select { display: block; margin-bottom: 15px; }
+    .hidden { display: none; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>Generate Your Custom Workout Plan</h1>
+  <form id="workoutForm">
+    <label>What is your focus?
+      <select id="focus" name="focus" required>
+        <option value="">--Select--</option>
+        <option value="strength">Strength</option>
+        <option value="endurance">Endurance</option>
+        <option value="power">Power</option>
+        <option value="hypertrophy">Hypertrophy</option>
+      </select>
+    </label>
+    <div id="subcategoryGroup" class="hidden">
+      <label>What area do you want to focus on?
+        <select id="subcategory" name="subcategory"></select>
+      </label>
+    </div>
+    <label>What is your gym access level?
+      <select id="access" name="access" required>
+        <option value="">--Select--</option>
+        <option value="access_none">None</option>
+        <option value="access_low">Low</option>
+        <option value="access_full">Full</option>
+      </select>
+    </label>
+    <label>How many days per week can you train?
+      <select id="days" name="days" required>
+        <option value="">--Select--</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+    </label>
+    <button type="submit">Generate Plan</button>
+  </form>
+  <div id="results"></div>
+
+  <script>
+    const focus = document.getElementById('focus');
+    const subcategoryGroup = document.getElementById('subcategoryGroup');
+    const subcategory = document.getElementById('subcategory');
+    const options = {
+      strength: ['Upper', 'Lower', 'Fullbody'],
+      endurance: ['Muscular - Upper', 'Muscular - Lower', 'Muscular - Full Body', 'Anaerobic', 'Aerobic'],
+      hypertrophy: ['Upper', 'Lower', 'Fullbody'],
+      power: []
+    };
+
+    focus.addEventListener('change', () => {
+      const value = focus.value;
+      const subs = options[value] || [];
+      subcategory.innerHTML = '';
+      if (subs.length > 0) {
+        subcategoryGroup.classList.remove('hidden');
+        subs.forEach(option => {
+          const opt = document.createElement('option');
+          opt.value = option.toLowerCase().replace(/\s|-/g, '_');
+          opt.textContent = option;
+          subcategory.appendChild(opt);
+        });
+      } else {
+        subcategoryGroup.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('workoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = {
+        focus: document.getElementById('focus').value,
+        subcategory: document.getElementById('subcategory')?.value || '',
+        access: document.getElementById('access').value,
+        days: document.getElementById('days').value
+      };
+      const response = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const plan = await response.json();
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+
+      if (plan.length === 0) {
+        results.textContent = 'No workout plan found.';
+        return;
+      }
+
+      const table = document.createElement('table');
+      const headerRow = table.insertRow();
+      ['Week', 'Day', 'Workout', 'Sets', 'Reps', 'Rest'].forEach(text => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        headerRow.appendChild(th);
+      });
+
+      plan.forEach(entry => {
+        const row = table.insertRow();
+        row.insertCell().textContent = entry.Week;
+        row.insertCell().textContent = entry.Day;
+        row.insertCell().textContent = entry.Workout;
+        row.insertCell().textContent = entry.Sets;
+        row.insertCell().textContent = entry.Reps;
+        row.insertCell().textContent = entry.Rest;
+      });
+
+      results.appendChild(table);
+    });
+  </script>
+</body>
+</html>
