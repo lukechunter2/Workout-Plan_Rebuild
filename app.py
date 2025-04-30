@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify, render_template
 import pandas as pd
 import random
@@ -6,6 +5,9 @@ import json
 
 app = Flask(__name__)
 df_tags = pd.read_pickle("exercise_tags.pkl")
+
+# 🔍 Print all unique tags in the loaded .pkl file
+print("🧪 Sample of ALL tags:", sorted(set(tag for tags in df_tags['Category'] for tag in tags)), flush=True)
 
 with open("full_focus_rules.json") as f:
     focus_rules = json.load(f)
